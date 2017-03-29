@@ -1,0 +1,109 @@
+<md-toolbar>My App</md-toolbar>
+<div *ngIf="currentPage == 1">
+  <md-card>
+    <h1>welcome</h1>
+    <button md-raised-button color="primary" (click)="moveNextPpage()">Next Page</button>
+  </md-card>
+</div>
+<div *ngIf="currentPage == 2">
+  <form class="example-form" [formGroup]="form">
+    <md-card>
+      <div>
+        <h4>Trip info</h4>
+        <section class="example-section">
+          <label class="example-section">Destination:</label>
+          <md-select formControlName="destination" class="example-margin" placeholder="Destination"
+                     [(ngModel)]="selectedValue" name="destination">
+            <md-option *ngFor="let dest of destinationList" [value]="dest.id">
+              {{dest.name}}
+            </md-option>
+          </md-select>
+        </section>
+        <section class="example-section">
+          <label class="example-section">Period:</label>
+          <md-select formControlName="period" class="example-margin" placeholder="Period" [(ngModel)]="selectPeriod"
+                     name="period">
+            <md-option *ngFor="let period of periodTime" [value]="period.value">
+              {{period.viewValue}}
+            </md-option>
+          </md-select>
+        </section>
+      </div>
+      <div>
+        <h4>Personal info</h4>
+        <section class="example-section">
+          <label class="example-section">Age:</label>
+          <md-select formControlName="age" class="example-margin" placeholder="Age" [(ngModel)]="selectAge" name="age">
+            <md-option *ngFor="let age of ages" [value]="age">
+              {{age}}
+            </md-option>
+          </md-select>
+        </section>
+        <section class="example-section">
+          <label class="example-section">Gender:</label>
+          <md-select formControlName="gender" class="example-margin" placeholder="Gender" [(ngModel)]="selectGender"
+                     name="gender">
+            <md-option value="male">Male</md-option>
+            <md-option value="female">Female</md-option>
+          </md-select>
+        </section>
+        <section class="example-section">
+          <label class="example-section">Go Next:</label>
+          <button md-raised-button (click)="moveNextPpage()" color="primary" [disabled]="!(form.status == 'VALID')">Next Page
+          </button>
+        </section>
+      </div>
+    </md-card>
+  </form>
+</div>
+<div *ngIf="currentPage==3">
+  <md-card>
+    <h4>List of items</h4>
+    <md-tab-group>
+      <md-tab label="Tab 1">
+        <div>
+          <md-chip-list class="mat-chip-list-stacked">
+            <md-chip *ngFor="let item of getDisplayList()" (click)="itemClick(item)" selected="true"
+                     [color]="getChipColor(item)">
+              {{item.name}}
+            </md-chip>
+          </md-chip-list>
+        </div>
+      </md-tab>
+      <md-tab label="Tab 2">
+        <div>
+          <md-chip-list class="mat-chip-list-stacked">
+            <md-chip *ngFor="let dest of ages" selected="true" color="primary">
+              chip1
+            </md-chip>
+          </md-chip-list>
+        </div>
+      </md-tab>
+      <md-tab label="Tab 3">
+        <div>
+          <md-chip-list >
+            <md-chip *ngFor="let dest of ages" selected="true" color="primary">
+              chip1
+            </md-chip>
+          </md-chip-list>
+        </div>
+      </md-tab>
+    </md-tab-group>
+    <section class="example-section">
+      <label class="example-section">Finish:</label>
+      <button md-raised-button  color="primary" (click)="sendJson()" [disabled]="!(selectedItemCounter() >= minItems)">Send</button>
+    </section>
+  </md-card>
+</div>
+<div *ngIf="currentPage == 4">
+  <md-card>
+    <h3>Thanks!</h3>
+    <div *ngIf="!sendComplete">
+    <h2>Send to server...</h2>
+    <md-progress-bar mode="indeterminate"></md-progress-bar>
+    </div>
+    <div *ngIf="sendComplete">
+      <h2>Finish, 10X</h2>
+    </div>
+  </md-card>
+</div>
