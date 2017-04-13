@@ -1,6 +1,6 @@
 export class ListItem {
   name: string;
-  id: number;
+  ItemId: number;
   isSelected?: boolean;
   categoryId?: number;
 }

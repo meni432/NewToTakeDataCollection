@@ -5,11 +5,13 @@ import { HttpModule, JsonpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import 'hammerjs';
+import { CategoryFilterPipe } from './category-filter.pipe';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CategoryFilterPipe
   ],
   imports: [
     BrowserModule,

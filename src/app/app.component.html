@@ -1,109 +1,161 @@
-<md-toolbar>My App</md-toolbar>
+<md-toolbar class="example-toolbar">ToTake איסוף מידע</md-toolbar>
 <div *ngIf="currentPage == 1">
   <md-card>
-    <h1>welcome</h1>
-    <button md-raised-button color="primary" (click)="moveNextPpage()">Next Page</button>
+    <md-card-header>
+      <md-card-title>ברוכים הבאים</md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <div>
+        <p>שלום,</p>
+        <p>To Take זוהי אפליקציה חכמה שעוזרת למשתמשים בה להרכיב רשימת ציוד לפני טיול בארץ או בחו"ל, הרעיון הוא שכל אחד
+          יוכל ליצור רשימות במהירות ובקלות ע"י כך שיכניס את יעד הנסיעה ותאריכים, והאפליקציה תציע לו בהתאם לכך את הפריטים
+          הרלוונטיים.</p>
+        <p>כדי לעזור ל To Take ללמוד להציע את התוצאות הטובות ביותר,<br/>נשמח אם תוכלו לספר לנו איזה פריטים לקחתם לטיול
+          האחרון שלכם.<br/>התהליך הוא רק כמה שלבים קצרים, עם רשימת פריטים לפי קטגוריות, וכל מה שאתם צריכים לעשות זה רק
+          לסמן את הפריטים שלקחתם.</p>
+        <p><em><strong>נודה לכם אם תשקיעו בבחירת הפריטים ולא תבחרו פריטים רנדומלית כדי לא לבלבל את המערכת.</strong></em>
+        </p>
+        <p>תודה מראש על העזרה!<br/>תהל, משה ומני.</p>
+      </div>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button color="primary" (click)="moveNextPpage()">הבא</button>
+    </md-card-actions>
   </md-card>
 </div>
 <div *ngIf="currentPage == 2">
   <form class="example-form" [formGroup]="form">
     <md-card>
-      <div>
-        <h4>Trip info</h4>
-        <section class="example-section">
-          <label class="example-section">Destination:</label>
-          <md-select formControlName="destination" class="example-margin" placeholder="Destination"
-                     [(ngModel)]="selectedValue" name="destination">
-            <md-option *ngFor="let dest of destinationList" [value]="dest.id">
-              {{dest.name}}
-            </md-option>
-          </md-select>
-        </section>
-        <section class="example-section">
-          <label class="example-section">Period:</label>
-          <md-select formControlName="period" class="example-margin" placeholder="Period" [(ngModel)]="selectPeriod"
-                     name="period">
-            <md-option *ngFor="let period of periodTime" [value]="period.value">
-              {{period.viewValue}}
-            </md-option>
-          </md-select>
-        </section>
-      </div>
-      <div>
-        <h4>Personal info</h4>
-        <section class="example-section">
-          <label class="example-section">Age:</label>
-          <md-select formControlName="age" class="example-margin" placeholder="Age" [(ngModel)]="selectAge" name="age">
-            <md-option *ngFor="let age of ages" [value]="age">
-              {{age}}
-            </md-option>
-          </md-select>
-        </section>
-        <section class="example-section">
-          <label class="example-section">Gender:</label>
-          <md-select formControlName="gender" class="example-margin" placeholder="Gender" [(ngModel)]="selectGender"
-                     name="gender">
-            <md-option value="male">Male</md-option>
-            <md-option value="female">Female</md-option>
-          </md-select>
-        </section>
-        <section class="example-section">
-          <label class="example-section">Go Next:</label>
-          <button md-raised-button (click)="moveNextPpage()" color="primary" [disabled]="!(form.status == 'VALID')">Next Page
-          </button>
-        </section>
-      </div>
+      <md-card-header>
+        <md-card-title>פרטי הטיול</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <div>
+          <section class="example-section">
+            <label class="example-section">יעד</label>
+            <md-select formControlName="destination" class="example-margin" placeholder="יעד"
+                       [(ngModel)]="selectedValue" name="destination">
+              <md-option *ngFor="let dest of destinationList" [value]="dest.id">
+                {{dest.name}}
+              </md-option>
+            </md-select>
+          </section>
+          <section class="example-section">
+            <label class="example-section">משך זמן</label>
+            <md-select formControlName="period" class="example-margin" placeholder="משך זמן" [(ngModel)]="selectPeriod"
+                       name="period">
+              <md-option *ngFor="let period of periodTime" [value]="period.value">
+                {{period.viewValue}}
+              </md-option>
+            </md-select>
+          </section>
+        </div>
+      </md-card-content>
+    </md-card>
+    <md-card>
+      <md-card-header>
+        <md-card-title>פרטיים אישיים</md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <div>
+          <section class="example-section">
+            <label class="example-section">גיל</label>
+            <md-select formControlName="age" class="example-margin" placeholder="גיל" [(ngModel)]="selectAge"
+                       name="age">
+              <md-option *ngFor="let age of ages" [value]="age">
+                {{age}}
+              </md-option>
+            </md-select>
+          </section>
+          <section class="example-section">
+            <label class="example-section">מין</label>
+            <md-select formControlName="gender" class="example-margin" placeholder="מין" [(ngModel)]="selectGender"
+                       name="gender">
+              <md-option value="male">זכר</md-option>
+              <md-option value="female">נקבה</md-option>
+            </md-select>
+          </section>
+        </div>
+      </md-card-content>
+      <md-card-actions>
+        <button md-raised-button (click)="moveNextPpage()" color="primary" [disabled]="!(form.status == 'VALID')">הבא
+        </button>
+      </md-card-actions>
     </md-card>
   </form>
 </div>
 <div *ngIf="currentPage==3">
   <md-card>
-    <h4>List of items</h4>
-    <md-tab-group>
-      <md-tab label="Tab 1">
-        <div>
-          <md-chip-list class="mat-chip-list-stacked">
-            <md-chip *ngFor="let item of getDisplayList()" (click)="itemClick(item)" selected="true"
-                     [color]="getChipColor(item)">
-              {{item.name}}
-            </md-chip>
-          </md-chip-list>
+    <md-card-header>
+      <md-card-title>רשימת פריטים</md-card-title>
+      <md-card-subtitle>לחץ על הפריט כדי לבחור אותו</md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      <div>
+        <i> קטוגריה {{(currentDisplayCategory+1)}} מתוך {{categoryNames.length}} </i>
+      </div>
+      <div>
+        <md-progress-bar
+          class="example-margin"
+          color="accent"
+          mode="determinate"
+          [value]="(currentDisplayCategory)*15 + 5">
+        </md-progress-bar>
+      </div>
+      <div>
+        <h4> {{ currentCategoryName(currentDisplayCategory) }}</h4>
+        <md-chip-list class="mat-chip-list-stacked">
+          <md-chip *ngFor="let item of getDisplayListWithCategory(currentDisplayCategory)" (click)="itemClick(item)"
+                   selected="true"
+                   [color]="getChipColor(item)">
+            {{item.name}} {{catActive}}
+          </md-chip>
+        </md-chip-list>
+        <div *ngIf="currentDisplayCategory == 7">
+          <section class="example-section">
+            <label class="example-section">פריטים אחרים</label>
+            <md-input-container class="example-margin">
+              <input mdInput placeholder="פריטים אחרים" maxlength="250" (keyup)="onKey($event)" [(ngModel)]="otherItemsInput">
+            </md-input-container>
+          </section>
         </div>
-      </md-tab>
-      <md-tab label="Tab 2">
-        <div>
-          <md-chip-list class="mat-chip-list-stacked">
-            <md-chip *ngFor="let dest of ages" selected="true" color="primary">
-              chip1
-            </md-chip>
-          </md-chip-list>
-        </div>
-      </md-tab>
-      <md-tab label="Tab 3">
-        <div>
-          <md-chip-list >
-            <md-chip *ngFor="let dest of ages" selected="true" color="primary">
-              chip1
-            </md-chip>
-          </md-chip-list>
-        </div>
-      </md-tab>
-    </md-tab-group>
-    <section class="example-section">
-      <label class="example-section">Finish:</label>
-      <button md-raised-button  color="primary" (click)="sendJson()" [disabled]="!(selectedItemCounter() >= minItems)">Send</button>
-    </section>
+      </div>
+    </md-card-content>
+    <md-card-actions>
+      <button *ngIf="currentDisplayCategory > 0" md-raised-button
+              (click)="goToPrevCategory()">
+        הקודם
+      </button>
+      <button *ngIf="currentDisplayCategory < (categoryNames.length - 1)" md-raised-button color="primary"
+              (click)="goToNextCategory()" [disabled]="!(getTotalCategorySelection() >= getMinItemsForCategory())">
+        הבא
+      </button>
+      <!--<button *ngIf="currentDisplayCategory < (categoryNames.length - 1)" md-raised-button color="primary" (click)="sendJson()" disabled>-->
+      <!--{{minItems}} / {{selectedItemCounter()}}-->
+      <!--</button>-->
+      <button *ngIf="currentDisplayCategory >= (categoryNames.length - 1)" md-raised-button color="primary"
+              (click)="sendJson()" [disabled]="!(getTotalCategorySelection() >= getMinItemsForCategory())">
+        סיום ושליחה
+      </button>
+
+      <button *ngIf="!(getTotalCategorySelection() >= getMinItemsForCategory())" md-button color="primary"
+              disabled="true">
+        יש לבחור לפחות {{getMinItemsForCategory()}} פריטים מקטגוריה זו
+      </button>
+
+    </md-card-actions>
   </md-card>
 </div>
 <div *ngIf="currentPage == 4">
   <md-card>
-    <h3>Thanks!</h3>
+    <h3>סיום</h3>
     <div *ngIf="!sendComplete">
-    <h2>Send to server...</h2>
-    <md-progress-bar mode="indeterminate"></md-progress-bar>
+      <h2>שולח לשרת..אנא המתן</h2>
+      <md-progress-bar mode="indeterminate"></md-progress-bar>
     </div>
     <div *ngIf="sendComplete">
-      <h2>Finish, 10X</h2>
+      <h2>התהליך הסתיים, תודה רבה!</h2>
+      <h3>נתראה בToTake</h3>
     </div>
   </md-card>
 </div>

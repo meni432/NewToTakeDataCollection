@@ -5,17 +5,20 @@ import {DestinationItem} from './destination-item';
 import {ListItem} from './list-item';
 import {Http, Response, RequestOptions, Headers, Request, RequestMethod, Jsonp} from '@angular/http';
 import {MdDialog} from "@angular/material";
+import {CategoryFilterPipe} from "./category-filter.pipe";
 
 const MIN_ITEMS = 3;
 const INITIAL_ITEMS = 300;
+const SERVER_ADDR = 'http://totake.website:3000/'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+
 })
 export class AppComponent implements OnInit {
-
+  MIN_CATEGORY_SELECTION_ITEMS:number = 3;
   form: FormGroup;
   minItems: number = MIN_ITEMS;
   title = 'app works!';
@@ -26,6 +29,9 @@ export class AppComponent implements OnInit {
   destinationList: DestinationItem[] = [];
   currentPage: number = 1;
   sendComplete: boolean =false;
+  catActive: number;
+  currentDisplayCategory: number = 0;
+  otherItemsInput: string = "";
 
   selectedValue: string;
   selectPeriod: string;
@@ -40,16 +46,21 @@ export class AppComponent implements OnInit {
   ];
 
   periodTime = [
-    {value: '7', viewValue: 'Week'},
-    {value: '30', viewValue: 'Month'},
-    {value: '60', viewValue: 'Month+'}
+    {value: '7', viewValue: 'שבוע'},
+    {value: '14', viewValue: 'שבועיים'},
+    {value: '30', viewValue: 'חודש'},
+    {value: '60', viewValue: 'יותר מחודש'}
   ];
 
-  categoryName = [
-    {id: 0, name: 'cat 1'},
-    {id: 1, name: 'cat 2'},
-    {id: 2, name: 'cat 5'},
-    {id: 3, name: 'cat 4'}
+  categoryNames = [
+    {cid: 0, name: 'פריטי לבוש', selection: 0, minSelection: 3},
+    {cid: 1, name: 'מסמכים/פרטי עזר', selection: 0, minSelection: 1},
+    {cid: 2, name: 'עזרה ראשונה', selection: 0, minSelection: 1},
+    {cid: 3, name: 'היגיינה וטיפוח', selection: 0, minSelection: 3},
+    {cid: 4, name: 'מוצרי חשמל', selection: 0, minSelection: 1},
+    {cid: 5, name: 'מזון', selection: 0, minSelection: 1},
+    {cid: 6, name: 'ציוד למטייל', selection: 0, minSelection: 1},
+    {cid: 7, name: 'אחר', selection: 0, minSelection: 1}
   ]
 
   stateCtrl: FormControl;
@@ -74,7 +85,7 @@ export class AppComponent implements OnInit {
   loadRemoteDestinationList() {
     let headers = new Headers();
     headers.append('Accept', 'application/json');
-    let itemsUrl = 'http://totake.website:3000/getDestination?callback=JSONP_CALLBACK';  // URL to web API
+    let itemsUrl = SERVER_ADDR + 'getDestination?callback=JSONP_CALLBACK';  // URL to web API
     this.jsonp.request(itemsUrl, {method: 'Get', headers: headers})
     // .subscribe((res) => {
     //   // this.result = res.json()
@@ -100,7 +111,7 @@ export class AppComponent implements OnInit {
     let items: ListItem[] = [];
     let headers = new Headers();
     headers.append('Accept', 'application/json');
-    let itemsUrl = 'http://totake.website:3000/getlist?callback=JSONP_CALLBACK';  // URL to web API
+    let itemsUrl = SERVER_ADDR + 'getlist?callback=JSONP_CALLBACK';  // URL to web API
     this.jsonp.request(itemsUrl, {method: 'Get', headers: headers})
     // .subscribe((res) => {
     //   // this.result = res.json()
@@ -113,7 +124,7 @@ export class AppComponent implements OnInit {
           let jdata = data.json();
           for (let i = 0; i < jdata.length; i++) {
             // console.log(data.json()[i].item_id);
-            let newItem: ListItem = {id: jdata[i].item_id, name: jdata[i].he_name, isSelected: false};
+            let newItem: ListItem = {ItemId: jdata[i].item_id, name: jdata[i].he_name, isSelected: false, categoryId: jdata[i].category};
             items.push(newItem);
           }
 
@@ -172,6 +183,7 @@ export class AppComponent implements OnInit {
     var index;
     index = this.selectionList.indexOf(item, 0);
     if (index > -1) {
+      this.categoryNames[this.currentDisplayCategory].selection--;
       // this.selectionList[index].isSelected = false;
       item.isSelected = false;
       this.selectionList.splice(index);
@@ -186,6 +198,7 @@ export class AppComponent implements OnInit {
       //   this.displayItems[index].isSelected = true;
       // }
       item.isSelected = true;
+      this.categoryNames[this.currentDisplayCategory].selection++;
     }
   }
 
@@ -193,19 +206,28 @@ export class AppComponent implements OnInit {
     return (this.displayItems);
   }
 
+  getDisplayListWithCategory(categoryId: number) : ListItem[] {
+    let ans : ListItem[] = [];
+    for (let item of this.displayItems) {
+      if (item.categoryId == categoryId) {
+        ans.push(item);
+      }
+    }
+    return ans;
+  }
+
   getSelectionIdList(): number[] {
     let ANS: number[] = [];
     for (let item of this.selectionList) {
-      ANS.push(item.id);
+      ANS.push(item.ItemId);
     }
+
     return ANS;
   }
 
   sendJson(): void {
     this.moveNextPpage();
-    var form_details = {"des": this.form.value.destination, "age": this.form.value.age};
-    // var body = JSON.stringify({trip: this.form.value, list: JSON.stringify(this.getSelectionIdList()));
-    var send_data = {details: this.form.value, list: this.getSelectionIdList()};
+    var send_data = {details: this.form.value, list: this.getSelectionIdList(), otherItem: this.otherItemsInput};
     let body: string = JSON.stringify(send_data);
     console.log(body);
     // let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -213,7 +235,7 @@ export class AppComponent implements OnInit {
     let options = new RequestOptions({headers: headers, method: "post"});
     //
     this.http
-      .post('http://totake.website:3000/send', body, options)
+      .post(SERVER_ADDR + 'send', body, options)
       // .map(response => response.json())
       .subscribe(
         // () => console.log('Authentication Complete')
@@ -242,24 +264,37 @@ export class AppComponent implements OnInit {
     this.currentPage++;
   }
 
-  insertItemToCategoryList(item : ListItem) :void {
-    let list : ListItem[] = this.displayItemsCategorys[item.categoryId];
-    list.push(item);
-  }
-
-  removeItemFromCategoryList(item: ListItem) : void {
-    let list : ListItem[] = this.displayItemsCategorys[item.categoryId];
-    let index = list.indexOf(item);
-    list.splice(index);
-  }
-
-  getItemsFromCategory(categoryId: number) : ListItem[] {
-    let list : ListItem[]  = this.displayItemsCategorys[categoryId];
-    return list;
-  }
 
   selectedItemCounter(): number {
     return this.selectionList.length;
+  }
+
+  goToNextCategory(): void {
+    if (this.currentDisplayCategory < this.categoryNames.length) {
+      this.currentDisplayCategory++;
+    }
+  }
+
+  goToPrevCategory(): void {
+    if (this.currentDisplayCategory > 0) {
+      this.currentDisplayCategory--;
+    }
+  }
+
+  currentCategoryName(): string {
+    return this.categoryNames[this.currentDisplayCategory].name;
+  }
+
+  getTotalCategorySelection(): number {
+    return this.categoryNames[this.currentDisplayCategory].selection;
+  }
+
+  getMinItemsForCategory(): number {
+    return this.categoryNames[this.currentDisplayCategory].minSelection;
+  }
+
+  onKey(event: any) {
+    this.categoryNames[this.currentDisplayCategory].selection++;
   }
 }
 

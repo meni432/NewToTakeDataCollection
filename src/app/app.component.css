@@ -23,7 +23,6 @@ body, html {
 md-card {
   max-width: 80%;
   margin: 2em auto;
-  /*text-align: center;*/
 }
 
 md-toolbar-row {
@@ -73,6 +72,7 @@ md-toolbar-row {
   align-content: flex-start;
   align-items: center;
   height: 60px;
+  text-align: right;
 }
 
 .search-section {
@@ -96,6 +96,11 @@ md-slider {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.example-toolbar {
+  background: cornflowerblue;
+  color: #F5F5F5;
 }
 
 md-chip {
