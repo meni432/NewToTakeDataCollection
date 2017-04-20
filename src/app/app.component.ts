@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
     {cid: 2, name: 'עזרה ראשונה', selection: 0, minSelection: 1},
     {cid: 3, name: 'היגיינה וטיפוח', selection: 0, minSelection: 3},
     {cid: 4, name: 'מוצרי חשמל', selection: 0, minSelection: 1},
-    {cid: 5, name: 'מזון', selection: 0, minSelection: 1},
+    {cid: 5, name: 'מזון', selection: 0, minSelection: 0},
     {cid: 6, name: 'ציוד למטייל', selection: 0, minSelection: 1},
     {cid: 7, name: 'אחר', selection: 0, minSelection: 1}
   ]
